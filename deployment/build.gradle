@@ -1,0 +1,47 @@
+description = "Quarkus Config ReProducer Extension Deployment"
+
+ext {
+    artifactBaseName = "quarkus-config-reproducer-deployment"
+}
+
+jar {
+    archiveBaseName = "${artifactBaseName}"
+}
+
+dependencies {
+    implementation project(":runtime")
+    implementation "io.quarkus:quarkus-arc-deployment"
+    implementation "io.quarkus:quarkus-core-deployment"
+    implementation "io.quarkus:quarkus-security-spi"
+    implementation "io.quarkus:quarkus-security-deployment"
+    implementation "io.quarkus:quarkus-vertx-http-deployment"
+    implementation "io.quarkus:quarkus-resteasy-reactive-deployment"
+    implementation "io.quarkus:quarkus-resteasy-reactive-jackson-deployment"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            artifactId "${artifactBaseName}"
+        }
+    }
+}
+
+test {
+    jacocoTestReport.enabled = false
+    jacoco {
+        // Need to provide these exclusively as they are quarkus jacoco config.
+        excludeClassLoaders = ["*QuarkusCLassLoader"]
+        destinationFile = layout.buildDirectory.file("jacoco-quarkus.exec").get().asFile
+    }
+}
+
+
+jacocoTestCoverageVerification {
+    dependsOn ":runtime:jacocoTestReport"
+    dependsOn rootProject.testCodeCoverageReport
+    dependsOn rootProject.testAggregateTestReport
+}
+

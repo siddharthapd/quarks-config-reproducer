@@ -1,0 +1,131 @@
+plugins {
+    id "base"
+    id "test-report-aggregation"
+    id "jacoco-report-aggregation"
+}
+
+description = "Quarkus Config Re-Producer Extension - Parent"
+
+ext {
+    artifactBaseName = "quarkus-config-reproducer-extension"
+}
+
+allprojects {
+    apply plugin: "maven-publish"
+
+    group "com.wasdshinobi"
+    version "1.0-SNAPSHOT"
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                pom {
+                    developers {
+                        developer {
+                            id = "siddharthapd"
+                            name = "Siddhartha Prasad"
+                            email = "sid.cse2013@gmail.com"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+subprojects {
+
+    apply plugin: "java-library"
+    apply plugin: "jacoco"
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    compileJava {
+        options.encoding = 'UTF-8'
+        options.compilerArgs << '-parameters'
+    }
+
+    compileTestJava {
+        options.encoding = 'UTF-8'
+    }
+
+    dependencies {
+        implementation platform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+
+        compileOnly "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+        testImplementation "io.quarkus:quarkus-jacoco"
+        testImplementation "io.quarkus:quarkus-junit5-mockito"
+        testImplementation "io.quarkus:quarkus-junit5"
+        testImplementation "io.quarkus:quarkus-junit5-internal"
+        testImplementation "io.rest-assured:rest-assured"
+        testImplementation "org.assertj:assertj-core:${assertjVersion}"
+        testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+        testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    }
+
+    tasks.withType(GenerateModuleMetadata).configureEach {
+        suppressedValidationErrors.add('enforced-platform')
+    }
+
+    test {
+        finalizedBy jacocoTestReport
+        jacoco {
+            destinationFile = layout.buildDirectory.file("jacoco-test.exec").get().asFile
+        }
+    }
+
+    jacocoTestReport {
+        dependsOn test
+        finalizedBy jacocoTestCoverageVerification
+    }
+
+    jacocoTestCoverageVerification {
+        dependsOn jacocoTestReport
+        executionData fileTree(project.rootDir.absolutePath).include("**/build/*.exec")
+    }
+
+    check.dependsOn jacocoTestCoverageVerification
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId "${artifactBaseName}"
+        }
+    }
+}
+
+dependencies {
+    testReportAggregation project(":deployment")
+    testReportAggregation project(":runtime")
+    jacocoAggregation project(":deployment")
+    jacocoAggregation project(":runtime")
+}
+
+reporting {
+    reports {
+        testAggregateTestReport(AggregateTestReport) {
+            testType = TestSuiteType.UNIT_TEST
+        }
+        testCodeCoverageReport(JacocoCoverageReport) {
+            testType = TestSuiteType.UNIT_TEST
+        }
+    }
+}
+
+check {
+    dependsOn testAggregateTestReport
+    dependsOn testCodeCoverageReport
+}
+
+

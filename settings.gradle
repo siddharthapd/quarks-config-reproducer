@@ -1,0 +1,14 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+        mavenLocal()
+    }
+    plugins {
+        id 'io.quarkus.extension' version "${quarkusPluginVersion}"
+    }
+}
+
+rootProject.name = 'quarkus-config-reproducer'
+include "deployment"
+include "runtime"

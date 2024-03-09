@@ -1,0 +1,35 @@
+plugins {
+    id "io.quarkus.extension"
+}
+
+description = "Quarkus Config Re-Producer Extension"
+
+ext {
+    artifactBaseName = "quarkus-config-reproducer"
+}
+
+jar {
+    archiveBaseName = "${artifactBaseName}"
+}
+
+dependencies {
+    implementation "io.quarkus:quarkus-security"
+    implementation "io.quarkus:quarkus-vertx-http"
+    implementation "io.quarkus:quarkus-resteasy-reactive"
+    implementation "io.quarkus:quarkus-resteasy-reactive-jackson"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            artifactId "${artifactBaseName}"
+        }
+    }
+}
+
+jacocoTestCoverageVerification {
+    dependsOn rootProject.testCodeCoverageReport
+    dependsOn rootProject.testAggregateTestReport
+}
