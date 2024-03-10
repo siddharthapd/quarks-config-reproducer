@@ -33,7 +33,8 @@ test {
     jacocoTestReport.enabled = false
     jacoco {
         // Need to provide these exclusively as they are quarkus jacoco config.
-        excludeClassLoaders = ["*QuarkusCLassLoader"]
+        // Below Line has to be commented in order for JaCoCo to run coverage against QuarkusDevModeTest execution
+        excludeClassLoaders = ["*QuarkusClassLoader"]
         destinationFile = layout.buildDirectory.file("jacoco-quarkus.exec").get().asFile
     }
 }
