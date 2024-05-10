@@ -7,7 +7,7 @@ import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-public class ProdModeDefaultTest {
+class ProdModeDefaultTest {
 
   @RegisterExtension
   static QuarkusUnitTest test = new QuarkusUnitTest()
