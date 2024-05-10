@@ -7,10 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ConfigBuildDefaultProcessor {
 
-    private static final String FEATURE = "quarkus-config-reproducer";
+  private static final String FEATURE = "quarkus-config-reproducer";
 
-    @BuildStep
-    FeatureBuildItem feature() {
-        return new FeatureBuildItem(FEATURE);
-    }
+  @BuildStep
+  FeatureBuildItem feature() {
+    return new FeatureBuildItem(FEATURE);
+  }
 }

@@ -6,8 +6,8 @@ import jakarta.ws.rs.Path;
 @Path("/hello")
 public class TestController {
 
-    @GET
-    public String getName() {
-        return "success";
-    }
+  @GET
+  public String getName() {
+    return "success";
+  }
 }
