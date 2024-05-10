@@ -9,13 +9,13 @@ import java.util.Optional;
 public class RunTimeConfig {
 
   /**
-   * host name
+   * host name.
    */
   @ConfigItem
   public String host;
 
   /**
-   * mocked identity name
+   * mocked identity name.
    */
   @ConfigItem
   public Optional<String> mockedIdentity;

@@ -9,7 +9,7 @@ import java.util.Optional;
 public class BuildTimeConfig {
 
   /**
-   * Wether this reproducer is enabled or not
+   * Wether this reproducer is enabled or not.
    */
   @ConfigItem
   public Optional<Boolean> enabled;
