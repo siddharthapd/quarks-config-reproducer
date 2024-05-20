@@ -42,6 +42,15 @@ subprojects {
 
     apply plugin: "java-library"
     apply plugin: "jacoco"
+    apply plugin: "checkstyle"
+
+    checkstyle {
+        toolVersion = "10.16.0"
+        configDirectory = rootProject.file("config/checkstyle")
+        ignoreFailures = false
+        showViolations = true
+        sourceSets = [sourceSets.main, sourceSets.test]
+    }
 
     java {
         sourceCompatibility = JavaVersion.VERSION_17
